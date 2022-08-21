@@ -164,6 +164,25 @@ class Instructor extends Lambdasian {
   grade(student, subject) {
     return `${student.name} receives a perfect score on ${subject}.`;
   }
+
+  changeGrade(student) {
+    //- Now that our students have a grade build out a method on the Instructor (this will be used by _BOTH_ instructors and PM's) that will randomly add or subtract points to a student's grade. _Math.random_ will help.
+
+    let positive = false;
+    const random = Math.round(Math.random());
+    random === 0 ? (positive = false) : (positive = true);
+    const gradeChange = Math.random() * 10;
+    positive === true ? (student.grade += gradeChange) : (student.grade -= gradeChange);
+    return student.grade;
+  }
+
+  checkGrade(student) {
+    if (student.grade >= 70) {
+      student.graduated = true;
+    } else {
+      this.changeGrade(student);
+    }
+  }
 }
 
 /*
@@ -188,6 +207,7 @@ class Student extends Lambdasian {
     this.previousBackground = options.previousBackground;
     this.className = options.className;
     this.favSubjects = options.favSubjects;
+    this.grade = Math.random() * 100;
   }
 
   listSubjects() {
@@ -200,6 +220,15 @@ class Student extends Lambdasian {
 
   sprintChallenge(subject) {
     return `${this.name} has begun sprint challenge on ${subject}`;
+  }
+
+  graduate() {
+    /*
+        - Add a graduate method to a student.
+      + This method, when called, will check the grade of the student and see if they're ready to graduate from BloomTech
+      + If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
+    */
+    return `Congratulation on graduating from Bloomtech ${this.name}!`;
   }
 }
 
@@ -217,7 +246,21 @@ class Student extends Lambdasian {
         + `debugsCode` a method that takes in a student object and a subject and returns `{name} debugs {student.name}'s code on {subject}`
 */
 
-class ProjectManager {}
+class ProjectManager extends Instructor {
+  constructor(options) {
+    super({ ...options });
+    this.gradClassName = options.gradClassName;
+    this.favInstructor = options.favInstructor;
+  }
+
+  standUp(channel) {
+    return `${this.name} announces to ${channel}, @channel standby times!`;
+  }
+
+  debugsCode(student, subject) {
+    return `${this.name} debugs ${student.name}'s code on ${subject}`;
+  }
+}
 
 /*
   STRETCH PROBLEM (no tests!)
